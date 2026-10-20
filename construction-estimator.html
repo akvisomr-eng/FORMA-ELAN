@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f5f1eb">
+<title>FORMA ELAN — Estimator RAB/BOQ Preview</title>
+<style>
+:root{--ink:#24241f;--muted:#74736b;--paper:#f5f1eb;--card:#fffdf9;--line:#ded8ce;--olive:#65684b;--gold:#b39a62;--warn:#f2e8d4}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 Arial,Helvetica,sans-serif}main{max-width:1120px;margin:auto;padding:28px 20px 60px}a{color:inherit}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive)}h1{font:400 clamp(28px,4vw,42px)/1.15 Georgia,serif;margin:8px 0}p{color:var(--muted)}.notice{background:var(--warn);border:1px solid #dfd0ad;padding:14px 16px;border-radius:10px;margin:18px 0}.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:16px 0}.panel h2{font:400 22px Georgia,serif;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;color:var(--muted)}input,select,button{font:inherit}input,select{min-width:0;width:100%;padding:10px;border:1px solid var(--line);border-radius:7px;background:white;color:var(--ink)}button{border:1px solid var(--olive);background:var(--olive);color:white;padding:10px 14px;border-radius:7px;cursor:pointer}button.secondary{background:transparent;color:var(--ink);border-color:var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:900px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;color:var(--muted);font-weight:600}td input{min-width:90px}.money{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metric{border:1px solid var(--line);border-radius:9px;padding:13px}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;font-size:20px;margin-top:4px}.status{font-size:12px;color:#7b5e26}.small{font-size:12px}.footer{border-top:1px solid var(--line);padding-top:16px;margin-top:26px;color:var(--muted);font-size:12px}@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.summary{grid-template-columns:1fr}main{padding:20px 12px 40px}}@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+  <a href="./index.html">← Kembali ke website FORMA ELAN</a>
+  <div class="eyebrow" style="margin-top:24px">Construction Intelligence · Stage A</div>
+  <h1>Estimator RAB / BOQ</h1>
+  <p>Hitung estimasi awal dari volume yang sudah diverifikasi dan harga satuan yang Anda masukkan.</p>
+  <div class="notice"><strong>Pratinjau — bukan dokumen penawaran resmi.</strong><br>Belum membaca gambar secara otomatis, belum terhubung ke database atau AI, dan tidak menyediakan harga pasar. Data hanya diproses di browser pada halaman ini. Simpan atau kirim hasil hanya setelah ditinjau penanggung jawab.</div>
+
+  <section class="panel">
+    <h2>Parameter biaya</h2>
+    <div class="grid">
+      <div class="field"><label for="project">Nama proyek</label><input id="project" placeholder="Contoh: Renovasi rumah" /></div>
+      <div class="field"><label for="overhead">Overhead (%)</label><input id="overhead" type="number" min="0" step="0.01" value="0" /></div>
+      <div class="field"><label for="profit">Margin / keuntungan (%)</label><input id="profit" type="number" min="0" step="0.01" value="0" /></div>
+      <div class="field"><label for="contingency">Cadangan risiko (%)</label><input id="contingency" type="number" min="0" step="0.01" value="0" /></div>
+      <div class="field"><label for="tax">Pajak (%)</label><input id="tax" type="number" min="0" step="0.01" value="0" /></div>
+      <div class="field"><label for="taxBase">Dasar pengenaan pajak</label><select id="taxBase"><option value="all">Subtotal + overhead + margin + cadangan</option><option value="direct">Biaya langsung saja</option></select></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Daftar kuantitas dan harga</h2>
+    <p class="small">Masukkan kuantitas hasil pengukuran dan komponen harga satuan. Item baru berstatus sementara sampai ditandai disetujui.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Kode</th><th>Uraian pekerjaan</th><th>Satuan</th><th>Volume</th><th>Material / unit</th><th>Upah / unit</th><th>Alat / unit</th><th>Lainnya / unit</th><th>Status</th><th>Jumlah</th><th></th></tr></thead>
+        <tbody id="items"></tbody>
+      </table>
+    </div>
+    <div class="actions"><button id="add">+ Tambah pekerjaan</button><button class="secondary" id="calculate">Hitung ulang</button><button class="secondary" id="export">Ekspor CSV</button></div>
+    <p id="message" role="status" aria-live="polite" class="small"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Ringkasan RAB</h2>
+    <div class="summary">
+      <div class="metric"><span>Biaya langsung</span><strong id="direct">Rp0</strong></div>
+      <div class="metric"><span>Overhead + margin + cadangan</span><strong id="indirect">Rp0</strong></div>
+      <div class="metric"><span>Total estimasi</span><strong id="grand">Rp0</strong></div>
+    </div>
+    <div id="breakdown" class="small" style="margin-top:14px"></div>
+    <p id="estimateStatus" class="status">Status: sementara — perlu verifikasi.</p>
+  </section>
+
+  <div class="footer">FORMA ELAN · Estimator preview. Hasil bukan pengganti pemeriksaan Quantity Surveyor, insinyur, akuntan pajak, atau penanggung jawab proyek. Tarif dan ketentuan pajak harus ditentukan sesuai proyek dan tanggal berlaku.</div>
+</main>
+<script type="module">
+import { calculateEstimate } from "./src/construction-estimator.mjs";
+const tbody = document.querySelector("#items");
+const currency = new Intl.NumberFormat("id-ID", {style:"currency",currency:"IDR",maximumFractionDigits:0});
+const escapeCsv = value => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+let lastResult = null;
+let nextId = 1;
+function addRow(seed = {}) {
+  const tr = document.createElement("tr");
+  const values = [
+    ["id", seed.id ?? "P-" + String(nextId++).padStart(3,"0"), "text"],
+    ["description", seed.description ?? "", "text"],
+    ["unit", seed.unit ?? "m2", "text"],
+    ["quantity", seed.quantity ?? 0, "number"],
+    ["materials", seed.materials ?? 0, "number"],
+    ["labour", seed.labour ?? 0, "number"],
+    ["equipment", seed.equipment ?? 0, "number"],
+    ["other", seed.other ?? 0, "number"]
+  ];
+  for (const [key,value,type] of values) {
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.dataset.key = key;
+    input.type = type;
+    input.value = value;
+    if (type === "number") { input.min = "0"; input.step = "any"; }
+    if (key === "id") input.readOnly = true;
+    if (key === "quantity") input.setAttribute("aria-label","Volume");
+    td.append(input); tr.append(td);
+  }
+  const statusCell = document.createElement("td");
+  const status = document.createElement("select");
+  status.dataset.key = "status";
+  status.innerHTML = '<option value="provisional">Sementara</option><option value="approved">Disetujui</option>';
+  status.value = seed.status === "approved" ? "approved" : "provisional";
+  statusCell.append(status); tr.append(statusCell);
+  const amount = document.createElement("td"); amount.className = "money"; amount.dataset.amount = "1"; amount.textContent = "—"; tr.append(amount);
+  const removeCell = document.createElement("td");
+  const remove = document.createElement("button"); remove.type = "button"; remove.className = "secondary"; remove.textContent = "Hapus";
+  remove.addEventListener("click", () => { tr.remove(); recalculate(); });
+  removeCell.append(remove); tr.append(removeCell);
+  tr.addEventListener("input", recalculate);
+  tr.addEventListener("change", recalculate);
+  tbody.append(tr);
+  recalculate();
+}
+function readNumber(id) {
+  const value = Number(document.getElementById(id).value);
+  if (!Number.isFinite(value) || value < 0) throw new Error("Persentase harus berupa angka nol atau lebih.");
+  return value;
+}
+function collect() {
+  return [...tbody.querySelectorAll("tr")].map(tr => {
+    const val = key => tr.querySelector('[data-key="' + key + '"]').value;
+    const n = key => {
+      const raw = val(key);
+      if (raw.trim() === "") throw new Error("Volume dan harga satuan wajib diisi angka.");
+      const parsed = Number(raw);
+      if (!Number.isFinite(parsed) || parsed < 0) throw new Error("Volume dan harga satuan tidak boleh negatif atau kosong.");
+      return parsed;
+    };
+    return { id: val("id"), description: val("description"), unit: val("unit"), quantity: n("quantity"),
+      rateComponents: {materials:n("materials"),labour:n("labour"),equipment:n("equipment"),other:n("other")},
+      status: val("status") };
+  });
+}
+function recalculate() {
+  const message = document.querySelector("#message");
+  try {
+    const result = calculateEstimate(collect(), {
+      overheadPercent:readNumber("overhead"), profitPercent:readNumber("profit"),
+      contingencyPercent:readNumber("contingency"), taxPercent:readNumber("tax"), taxBase:document.querySelector("#taxBase").value
+    });
+    lastResult = result;
+    [...tbody.querySelectorAll("tr")].forEach((tr,index) => {
+      tr.querySelector("[data-amount]").textContent = currency.format(result.items[index]?.amount ?? 0);
+    });
+    document.querySelector("#direct").textContent = currency.format(result.directCost);
+    document.querySelector("#indirect").textContent = currency.format(result.overhead.amount + result.profit.amount + result.contingency.amount);
+    document.querySelector("#grand").textContent = currency.format(result.grandTotal);
+    document.querySelector("#breakdown").textContent =
+      "Overhead " + result.overhead.percent + "%: " + currency.format(result.overhead.amount) +
+      " · Margin " + result.profit.percent + "%: " + currency.format(result.profit.amount) +
+      " · Cadangan " + result.contingency.percent + "%: " + currency.format(result.contingency.amount) +
+      " · Pajak " + result.tax.percent + "%: " + currency.format(result.tax.amount);
+    document.querySelector("#estimateStatus").textContent = "Status: " + (result.status === "provisional" ? "sementara — masih ada item yang belum disetujui." : "perlu pemeriksaan akhir sebelum digunakan.");
+    message.textContent = "Perhitungan diperbarui. Periksa setiap volume, tarif, asumsi, dan dasar pajak.";
+    message.style.color = "";
+  } catch (error) {
+    lastResult = null;
+    message.textContent = error.message || "Periksa kembali input.";
+    message.style.color = "#8b352d";
+  }
+}
+document.querySelector("#add").addEventListener("click", () => addRow());
+document.querySelector("#calculate").addEventListener("click", recalculate);
+["overhead","profit","contingency","tax","taxBase"].forEach(id => {
+  document.getElementById(id).addEventListener("input",recalculate);
+  document.getElementById(id).addEventListener("change",recalculate);
+});
+document.querySelector("#export").addEventListener("click", () => {
+  if (!lastResult) { document.querySelector("#message").textContent = "Perbaiki input sebelum ekspor."; return; }
+  const project = document.querySelector("#project").value || "Proyek tanpa nama";
+  const lines = [
+    ["FORMA ELAN - RAB/BOQ PREVIEW", project],
+    ["Status",lastResult.status],
+    ["Kode","Uraian","Satuan","Volume","Material/unit","Upah/unit","Alat/unit","Lainnya/unit","Harga satuan","Jumlah","Status"],
+    ...lastResult.items.map(x => [x.id,x.description,x.unit,x.quantity,x.rateComponents.materials,x.rateComponents.labour,x.rateComponents.equipment,x.rateComponents.other,x.unitRate,x.amount,x.status]),
+    ["Biaya langsung",lastResult.directCost],
+    ["Overhead",lastResult.overhead.percent,lastResult.overhead.amount],
+    ["Margin",lastResult.profit.percent,lastResult.profit.amount],
+    ["Cadangan",lastResult.contingency.percent,lastResult.contingency.amount],
+    ["Pajak",lastResult.tax.percent,lastResult.tax.amount],
+    ["TOTAL ESTIMASI",lastResult.grandTotal],
+    ["Catatan",lastResult.disclaimer]
+  ];
+  const csv = "\uFEFF" + lines.map(row => row.map(escapeCsv).join(",")).join("\r\n");
+  const blob = new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download="forma-elan-rab-boq-preview.csv"; a.click();
+  URL.revokeObjectURL(url);
+});
+addRow({id:"P-001",description:"Contoh pekerjaan — ubah atau hapus",unit:"m2",quantity:0,materials:0,labour:0});
+</script>
+</body>
+</html>
