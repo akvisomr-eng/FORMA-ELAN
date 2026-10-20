@@ -39,11 +39,13 @@ jobs:
           npx --yes neonctl@latest function deploy formaapi \
             --src backend/src/index.mjs \
             --project-id curly-meadow-68675030 \
-            --branch-id br-proud-sunset-b44taoa8
+            --branch-id br-proud-sunset-b44taoa8 \\
+            --api-key "$NEON_API_KEY"
       - name: Report deployment endpoint
         env:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: |
           npx --yes neonctl@latest function get formaapi \
             --project-id curly-meadow-68675030 \
-            --branch-id br-proud-sunset-b44taoa8
+            --branch-id br-proud-sunset-b44taoa8 \\
+            --api-key "$NEON_API_KEY"
