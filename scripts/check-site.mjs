@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 const html = readFileSync("index.html", "utf8");
 const prototype = readFileSync("management-prototype.html", "utf8");
 const estimator = readFileSync("construction-estimator.html", "utf8");
+const survey = readFileSync("field-survey.html", "utf8");
 assert.ok(existsSync("src/construction-estimator.mjs"), "Construction estimator engine missing");
 assert.ok(existsSync("tests/construction-estimator.test.mjs"), "Construction estimator tests missing");
 
@@ -21,8 +22,14 @@ assert.match(estimator, /name="robots" content="noindex,nofollow"/i, "Estimator 
 assert.match(estimator, /Pratinjau — bukan dokumen penawaran resmi/i, "Estimator must disclose its preview status");
 assert.match(estimator, /tidak menyediakan harga pasar/i, "Estimator must disclose it does not provide market prices");
 assert.match(estimator, /calculateEstimate/, "Estimator page must call the deterministic calculation module");
-assert.doesNotMatch(html + prototype + estimator, /postgres(?:ql)?:\/\/[^\s"'<>]+/i, "Public HTML must not contain a database connection URL");
-assert.doesNotMatch(html + prototype + estimator, /(?:sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|NEON_API_KEY\s*=)/, "Public HTML must not contain common provider/API secret patterns");
+assert.match(survey, /name="robots" content="noindex,nofollow"/i, "Field survey preview must not be indexed");
+assert.match(survey, /belum terhubung ke server/i, "Field survey must disclose its preview/server status");
+assert.match(survey, /type="file"/i, "Field survey must allow local image selection");
+assert.match(survey, /forma-elan-field-survey\.v1/, "Field survey must export a versioned data contract");
+assert.match(survey, /contentIncluded:false/, "Survey JSON must not pretend that images are embedded");
+assert.match(survey, /not-uploaded/, "Survey must disclose that images are not uploaded");
+assert.doesNotMatch(html + prototype + estimator + survey, /postgres(?:ql)?:\/\/[^\s"'<>]+/i, "Public HTML must not contain a database connection URL");
+assert.doesNotMatch(html + prototype + estimator + survey, /(?:sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|NEON_API_KEY\s*=)/, "Public HTML must not contain common provider/API secret patterns");
 assert.ok(existsSync(".github/workflows/deploy-pages.yml"), "Pages deployment workflow missing");
 console.log("FORMA ELAN static-site checks passed.");
-console.log("Verified: Indonesian metadata, required sections, text/voice companion, honest demo notices, and no obvious database/API secrets.");
+console.log("Verified: Indonesian metadata, site/voice elements, demo disclosures, survey preview safeguards, and no obvious database/API secrets.");
