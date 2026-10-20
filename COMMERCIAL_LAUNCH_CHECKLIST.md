@@ -19,7 +19,7 @@ This checklist distinguishes committed code, configured services, tested flows, 
 
 ### Release / website
 - [ ] Latest quality-check workflow completes successfully.
-- [ ] Latest Pages deployment completes successfully.
+- [ ] Latest Pages deployment completes successfully. The workflow now runs automated post-deploy smoke tests against the homepage and management prototype, but a successful run is not yet verified.
 - [ ] Verify live homepage, mobile layout, all nav links, consultation form, and companion on desktop and Android.
 - [ ] Verify speech recognition support/permission errors and Indonesian speech quality; text must remain available when voice is unsupported.
 - [ ] Replace the reference gallery with approved real project images and verify all claims/portfolio captions.
