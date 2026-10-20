@@ -21,8 +21,8 @@ assert.match(estimator, /name="robots" content="noindex,nofollow"/i, "Estimator 
 assert.match(estimator, /Pratinjau — bukan dokumen penawaran resmi/i, "Estimator must disclose its preview status");
 assert.match(estimator, /tidak menyediakan harga pasar/i, "Estimator must disclose it does not provide market prices");
 assert.match(estimator, /calculateEstimate/, "Estimator page must call the deterministic calculation module");
-assert.doesNotMatch(html + prototype, /postgres(?:ql)?:\/\/[^\s"'<>]+/i, "Public files must not contain a database connection URL");
-assert.doesNotMatch(html + prototype, /(?:sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|NEON_API_KEY\s*=)/, "Public files must not contain common provider/API secret patterns");
+assert.doesNotMatch(html + prototype + estimator, /postgres(?:ql)?:\/\/[^\s"'<>]+/i, "Public HTML must not contain a database connection URL");
+assert.doesNotMatch(html + prototype + estimator, /(?:sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|NEON_API_KEY\s*=)/, "Public HTML must not contain common provider/API secret patterns");
 assert.ok(existsSync(".github/workflows/deploy-pages.yml"), "Pages deployment workflow missing");
 console.log("FORMA ELAN static-site checks passed.");
 console.log("Verified: Indonesian metadata, required sections, text/voice companion, honest demo notices, and no obvious database/API secrets.");
