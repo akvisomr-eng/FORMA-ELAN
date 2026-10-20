@@ -50,7 +50,7 @@ test("zero quantity and omitted rate components are valid", () => {
 test("rejects missing descriptions, negative quantities, invalid rates and percentages", () => {
   assert.throws(() => calculateEstimate([{ id: "X", unit: "m2", quantity: 1 }]), /description is required/);
   assert.throws(() => calculateEstimate([{ id: "X", description: "X", unit: "m2", quantity: -1 }]), /quantity/);
-  assert.throws(() => calculateEstimate([{ id: "X", description: "X", unit: "m2", quantity: 1, rateComponents: { labour: -1 } }]), /rate component/);
+  assert.throws(() => calculateEstimate([{ id: "X", description: "X", unit: "m2", quantity: 1, rateComponents: { labour: -1 } }]), /invalid labour rate/);
   assert.throws(() => calculateEstimate([], { taxPercent: Number.NaN }), /taxPercent/);
   assert.throws(() => calculateEstimate([], { taxBase: "unknown" }), /taxBase/);
 });
