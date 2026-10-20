@@ -22,3 +22,5 @@ jobs:
           node-version: 24
       - name: Check static website and public assets
         run: node scripts/check-site.mjs
+      - name: Test deterministic construction estimator
+        run: node --test tests/construction-estimator.test.mjs
