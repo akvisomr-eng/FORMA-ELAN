@@ -36,7 +36,7 @@ jobs:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: |
           test -n "$NEON_API_KEY" || (echo "Missing repository/environment secret NEON_API_KEY" && exit 1)
-          npx --yes neonctl@latest functions deploy formaapi \
+          npx --yes neonctl@latest function deploy formaapi \
             --src backend/src/index.mjs \
             --project-id curly-meadow-68675030 \
             --branch-id br-proud-sunset-b44taoa8
@@ -44,6 +44,6 @@ jobs:
         env:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         run: |
-          npx --yes neonctl@latest functions get formaapi \
+          npx --yes neonctl@latest function get formaapi \
             --project-id curly-meadow-68675030 \
             --branch-id br-proud-sunset-b44taoa8
