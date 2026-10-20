@@ -41,7 +41,7 @@ FORMA ELAN must not become only a static website plus ordinary CRUD dashboard. T
 
 ## Phase 3 — Security before real data
 
-- Enable and test a real authentication provider.
+- Neon Managed Auth (Better Auth) has been enabled on the target branch, and `https://akvisomr-eng.github.io` has been added as a trusted origin. Actual sign-up/sign-in/session/protected-route flows are not yet integrated or tested.
 - Enforce organization isolation and role-based authorization in a trusted server/API layer.
 - Never put database connection strings or privileged credentials in frontend JavaScript.
 - Add server-side validation, rate limiting, input validation, safe error handling and audit logging.
@@ -59,6 +59,12 @@ Recommended implementation order:
 6. Accounting journals, tax configuration and financial reports.
 7. Employee master, attendance and payroll, with restricted HR/finance access.
 8. E-commerce catalog, cart, orders, payment-provider integration and order fulfilment.
+
+## Delivery and CI safeguards
+
+- GitHub Actions now includes a static-site quality check for required Indonesian website sections, text/voice companion hooks, truthful prototype notices, and obvious credential/connection-string patterns.
+- The Pages deployment workflow is restricted to the public website files (`index.html`, `management-prototype.html`, and optional `assets/`) rather than uploading the whole repository root.
+- These workflow changes need a successful Actions run and a live URL smoke test before being marked released.
 
 ## Important limitations
 
