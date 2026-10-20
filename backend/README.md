@@ -24,6 +24,13 @@ This API is designed for Neon Functions and uses the branch-injected `DATABASE_U
 
 Run `node --test tests/backend-validation.test.mjs`. Runtime dependencies are listed in `package.json`.
 
-## Deployment status
+## Deployment
 
-Source and configuration are committed to GitHub; the function has not yet been deployed. Deploying requires a successful bundle/build, Neon Function deployment, and authenticated integration tests, including the new workspace-onboarding route. Do not put database URLs, OAuth secrets, or API keys in GitHub or the browser.
+A guarded manual GitHub Actions workflow is available at `.github/workflows/deploy-neon-api.yml`.
+
+1. In GitHub repository Settings → Secrets and variables → Actions, create secret `NEON_API_KEY` using a Neon API key with access only to this project where possible. Do not paste the key into chat or commit it.
+2. In Settings → Environments, confirm the `production` environment is available. Add required reviewers if desired.
+3. Open Actions → “Deploy FORMA ELAN API to Neon” → Run workflow. Enter `DEPLOY` exactly to confirm the production target.
+4. Review the workflow logs and invocation URL, then test `GET /health`, invalid-token rejection, authenticated bootstrap, first-workspace creation, and cross-organization access denial before connecting the public UI.
+
+The workflow deploys only the API source and runs syntax/validation checks first. It does not enable uploads or AI. Do not expose a frontend pointing at this API until authenticated end-to-end tests pass. Do not put database URLs, OAuth secrets, or API keys in GitHub source or the browser.
