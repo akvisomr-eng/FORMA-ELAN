@@ -24,5 +24,7 @@ jobs:
         run: node scripts/check-site.mjs
       - name: Test deterministic construction estimator
         run: node --test tests/construction-estimator.test.mjs
+      - name: Test backend module syntax
+        run: node --check backend/src/index.mjs
       - name: Test backend request validation
         run: node --test tests/backend-validation.test.mjs
