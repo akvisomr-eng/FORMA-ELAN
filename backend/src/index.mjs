@@ -62,14 +62,36 @@ export default {
     if (request.method === "GET" && url.pathname === "/health") {
       return json({ service: "forma-elan-api", status: "ok", auth: "required-for-data", uploads: "disabled" });
     }
-    if (url.pathname !== "/v1/surveys" || !["GET", "POST"].includes(request.method)) {
-      return json({ error: "not_found" }, 404);
-    }
+    const isBootstrap = url.pathname === "/v1/me/bootstrap" && request.method === "POST";
+    const isSurveyRoute = url.pathname === "/v1/surveys" && ["GET", "POST"].includes(request.method);
+    if (!isBootstrap && !isSurveyRoute) return json({ error: "not_found" }, 404);
     const identity = await requireIdentity(request);
     if (!identity) return json({ error: "unauthorized" }, 401);
 
     try {
       const sql = getSql();
+      if (isBootstrap) {
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(identity.subject)) {
+          return json({ error: "invalid_identity_subject" }, 401);
+        }
+        const authUsers = await sql`SELECT id, name, email FROM neon_auth."user" WHERE id = ${identity.subject}::uuid LIMIT 1`;
+        const authUser = authUsers[0];
+        if (!authUser || typeof authUser.email !== "string" || !authUser.email.trim()) {
+          return json({ error: "auth_user_not_found" }, 403);
+        }
+        const fullName = (typeof authUser.name === "string" && authUser.name.trim())
+          ? authUser.name.trim().slice(0, 255)
+          : authUser.email.split("@")[0].slice(0, 255);
+        const profiles = await sql`
+          INSERT INTO public.user_profiles (auth_provider, auth_subject, full_name, email, is_active)
+          VALUES ('better_auth', ${identity.subject}, ${fullName}, ${authUser.email}, true)
+          ON CONFLICT (auth_subject) DO UPDATE
+            SET full_name = EXCLUDED.full_name, email = EXCLUDED.email, updated_at = now()
+          RETURNING id, full_name AS "fullName", email
+        `;
+        return json({ data: profiles[0], organizationMembershipRequired: true });
+      }
+
       const profile = await resolveProfile(sql, identity.subject);
       if (!profile) return json({ error: "profile_not_provisioned" }, 403);
 
