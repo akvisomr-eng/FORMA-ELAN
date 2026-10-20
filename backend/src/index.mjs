@@ -8,7 +8,11 @@ const json = (body, status = 200) => new Response(JSON.stringify(body), {
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store",
     "x-content-type-options": "nosniff",
-    "referrer-policy": "no-referrer"
+    "referrer-policy": "no-referrer",
+    "access-control-allow-origin": "https://akvisomr-eng.github.io",
+    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-headers": "authorization, content-type",
+    "vary": "Origin"
   }
 });
 
@@ -59,6 +63,18 @@ async function hasProjectAccess(sql, userId, organizationId, projectId) {
 export default {
   async fetch(request) {
     const url = new URL(request.url);
+    if (request.headers.get("origin") && request.headers.get("origin") !== "https://akvisomr-eng.github.io") {
+      return json({ error: "origin_not_allowed" }, 403);
+    }
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: {
+        "access-control-allow-origin": "https://akvisomr-eng.github.io",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-headers": "authorization, content-type",
+        "access-control-max-age": "600",
+        "vary": "Origin"
+      }});
+    }
     if (request.method === "GET" && url.pathname === "/health") {
       return json({ service: "forma-elan-api", status: "ok", auth: "required-for-data", uploads: "disabled" });
     }
