@@ -1,0 +1,3 @@
+# FORMA ELAN — Website Starter
+
+This repository currently contains a static, responsive Indonesian-language storefront in index.html. The portfolio images are explicitly marked as visual references, not verified client projects. The consultation form composes a WhatsApp message for the visitor to review and send; it does not persist leads or claim CRM integration. Neon remains untouched until schema, access controls, and server-side integration are implemented and tested.
