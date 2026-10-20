@@ -37,7 +37,7 @@ jobs:
         run: |
           rm -rf _site
           mkdir -p _site
-          cp index.html management-prototype.html construction-estimator.html _site/
+          cp index.html management-prototype.html construction-estimator.html field-survey.html _site/
           mkdir -p _site/src
           cp src/construction-estimator.mjs _site/src/
           if [ -d assets ]; then cp -R assets _site/assets; fi
@@ -60,4 +60,7 @@ jobs:
           grep -qi 'Prototype' /tmp/forma-management.html
           curl --fail --silent --show-error --location --retry 10 --retry-all-errors --retry-delay 5 "${PAGE_URL%/}/construction-estimator.html" -o /tmp/forma-estimator.html
           grep -qi 'Estimator RAB / BOQ' /tmp/forma-estimator.html
-          echo "Public homepage, management prototype, and estimator preview returned expected content."
+          curl --fail --silent --show-error --location --retry 10 --retry-all-errors --retry-delay 5 "${PAGE_URL%/}/field-survey.html" -o /tmp/forma-survey.html
+          grep -qi 'Survei Lapangan' /tmp/forma-survey.html
+          grep -qi 'belum terhubung ke server' /tmp/forma-survey.html
+          echo "Public homepage, management prototype, estimator, and field survey preview returned expected content."
