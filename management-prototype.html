@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>FORMA ELAN — Management Prototype</title>
+<style>
+:root{--ink:#25261f;--muted:#77796e;--paper:#f4f1eb;--card:#fffdf8;--line:#e2ddd2;--olive:#686c4e;--soft:#e9e8dd;--gold:#b39a62}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 Arial,Helvetica,sans-serif}button,input{font:inherit}.layout{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.sidebar{background:#292a23;color:#f8f5ee;padding:25px 18px}.brand{font-family:Georgia,serif;font-size:22px;letter-spacing:.14em;padding:8px 10px 26px}.brand small{display:block;font:10px Arial;letter-spacing:.19em;color:#c8c2b5;margin-top:4px}.navlabel{color:#a9a99d;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:17px 10px 8px}.nav a{display:flex;gap:10px;align-items:center;padding:10px;border-radius:8px;color:#e5e2d9;margin:2px 0;text-decoration:none}.nav a.active,.nav a:hover{background:#414337;color:white}.nav .dot{width:7px;height:7px;border:1px solid #b8b89c;border-radius:2px}.sidebar-foot{margin:40px 10px 0;color:#aaa99d;font-size:11px}.main{min-width:0}.top{display:flex;justify-content:space-between;align-items:center;padding:22px 30px;border-bottom:1px solid var(--line);background:rgba(255,253,248,.72)}.crumb{font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}.user{border:1px solid var(--line);padding:8px 12px;border-radius:99px;font-size:12px}.content{max-width:1400px;margin:auto;padding:30px}.eyebrow{color:var(--olive);font-size:11px;text-transform:uppercase;letter-spacing:.16em}.heading{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:7px 0 24px}.heading h1{font:clamp(28px,4vw,40px)/1.12 Georgia,serif;font-weight:400;margin:0}.date{color:var(--muted);font-size:12px}.notice{background:#f0e7d3;border:1px solid #dfd0ad;color:#5e5135;padding:13px 16px;border-radius:10px;margin-bottom:22px}.notice strong{display:block;margin-bottom:2px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:12px}.stat{padding:18px}.stat-head{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.symbol{color:var(--olive);font-size:18px}.metric{font:30px Georgia,serif;margin:16px 0 4px}.hint{font-size:11px;color:var(--muted)}.section-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(270px,.8fr);gap:16px;margin-top:16px}.panel{padding:20px}.panel h2{font:22px Georgia,serif;font-weight:400;margin:0}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.pill{font-size:10px;letter-spacing:.04em;border-radius:99px;padding:5px 8px;background:var(--soft);color:#555943}.rows{display:grid;gap:0}.rowitem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:13px 0;border-top:1px solid var(--line)}.rowitem strong{font-size:12px;font-weight:600;display:block}.rowitem small{color:var(--muted);font-size:11px}.amount{font-size:12px;text-align:right;white-space:nowrap}.bar{height:5px;background:#e9e5dc;border-radius:8px;margin-top:9px;overflow:hidden}.bar span{display:block;height:100%;background:var(--olive);border-radius:8px}.modules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.module{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}.module .icon{font-size:19px;color:var(--olive)}.module h3{font:18px Georgia,serif;font-weight:400;margin:12px 0 4px}.module p{font-size:11px;color:var(--muted);margin:0 0 14px}.module a{font-size:11px;color:var(--olive);text-decoration:none}.footer{color:var(--muted);font-size:10px;padding:24px 0 4px}.muted{color:var(--muted)}@media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section-grid{grid-template-columns:1fr}.modules{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:22px}.top{padding:18px 22px}}@media(max-width:620px){.layout{display:block}.sidebar{padding:12px 14px}.brand{padding:5px 6px 12px}.nav{display:flex;overflow:auto;gap:5px}.navlabel,.sidebar-foot{display:none}.nav a{white-space:nowrap;font-size:11px;padding:8px}.nav .dot{display:none}.top{padding:13px 16px}.content{padding:18px 14px}.heading{align-items:start;flex-direction:column}.stats{gap:9px}.stat{padding:13px}.metric{font-size:25px}.modules{grid-template-columns:1fr 1fr}.panel{padding:15px}}@media(max-width:380px){.modules{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.user{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">FORMA ELAN<small>STUDIO MANAGEMENT</small></div>
+  <nav class="nav" aria-label="Navigasi prototipe">
+    <div class="navlabel">Workspace</div>
+    <a class="active" href="#overview"><span class="dot"></span> Ringkasan</a>
+    <a href="#crm"><span class="dot"></span> CRM & Pelanggan</a>
+    <a href="#projects"><span class="dot"></span> Proyek</a>
+    <a href="#inventory"><span class="dot"></span> Material & Stok</a>
+    <div class="navlabel">Bisnis</div>
+    <a href="#sales"><span class="dot"></span> Penawaran & Invoice</a>
+    <a href="#finance"><span class="dot"></span> Keuangan</a>
+    <a href="#people"><span class="dot"></span> HRD & Payroll</a>
+    <a href="#reports"><span class="dot"></span> Laporan</a>
+  </nav>
+  <div class="sidebar-foot">Prototype UI · Belum terhubung ke database</div>
+</aside>
+<main class="main" id="overview">
+  <header class="top"><div class="crumb">FORMA ELAN / Workspace</div><div class="user">Mode pratinjau · Data contoh</div></header>
+  <div class="content">
+    <div class="eyebrow">Studio operations</div>
+    <div class="heading"><h1>Ruang kendali bisnis.</h1><div class="date">Pratinjau antarmuka · 20 Oktober 2026</div></div>
+    <div class="notice"><strong>Prototype — bukan data operasional.</strong>Angka, proyek, dan aktivitas di bawah ini hanya contoh visual. Login, hak akses, API, dan database belum aktif.</div>
+    <section class="stats" aria-label="Contoh ringkasan">
+      <article class="stat"><div class="stat-head"><span>Prospek aktif</span><span class="symbol">↗</span></div><div class="metric">12</div><div class="hint">Contoh angka · CRM</div></article>
+      <article class="stat"><div class="stat-head"><span>Proyek berjalan</span><span class="symbol">⌂</span></div><div class="metric">04</div><div class="hint">Contoh angka · Proyek</div></article>
+      <article class="stat"><div class="stat-head"><span>Nilai penawaran</span><span class="symbol">◇</span></div><div class="metric">Rp 485 jt</div><div class="hint">Contoh angka · Penjualan</div></article>
+      <article class="stat"><div class="stat-head"><span>Stok perlu cek</span><span class="symbol">▤</span></div><div class="metric">03</div><div class="hint">Contoh angka · Inventori</div></article>
+    </section>
+    <div class="section-grid">
+      <section class="panel" id="projects"><div class="panel-head"><h2>Pipeline proyek</h2><span class="pill">DATA CONTOH</span></div>
+        <div class="rows">
+          <div class="rowitem"><div><strong>Residensi — konsep interior</strong><small>Desain interior · Perencanaan</small><div class="bar"><span style="width:24%"></span></div></div><div class="amount">24%<br><small>Konsep</small></div></div>
+          <div class="rowitem"><div><strong>Ruang kerja — renovasi</strong><small>Design & build · Pelaksanaan</small><div class="bar"><span style="width:68%"></span></div></div><div class="amount">68%<br><small>Berjalan</small></div></div>
+          <div class="rowitem"><div><strong>Villa — custom furniture</strong><small>Furniture · Produksi</small><div class="bar"><span style="width:42%"></span></div></div><div class="amount">42%<br><small>Produksi</small></div></div>
+        </div>
+      </section>
+      <section class="panel" id="crm"><div class="panel-head"><h2>Aktivitas berikutnya</h2><span class="pill">CONTOH</span></div>
+        <div class="rows">
+          <div class="rowitem"><div><strong>Follow-up konsultasi</strong><small>Prospek desain rumah</small></div><div class="amount">09.30</div></div>
+          <div class="rowitem"><div><strong>Review material</strong><small>Proyek renovasi</small></div><div class="amount">13.00</div></div>
+          <div class="rowitem"><div><strong>Presentasi penawaran</strong><small>Calon pelanggan</small></div><div class="amount">15.30</div></div>
+        </div>
+      </section>
+    </div>
+    <section class="modules" aria-label="Modul sistem manajemen">
+      <article class="module" id="sales"><div class="icon">◇</div><h3>CRM & Penjualan</h3><p>Prospek, pelanggan, follow-up, penawaran, dan status deal.</p><a href="#crm">Lihat modul →</a></article>
+      <article class="module"><div class="icon">⌂</div><h3>Manajemen Proyek</h3><p>Jadwal, tugas, milestone, progres, biaya, dan tim proyek.</p><a href="#projects">Lihat modul →</a></article>
+      <article class="module" id="inventory"><div class="icon">▤</div><h3>Material & Stok</h3><p>Master material, pergerakan stok, kebutuhan, dan batas minimum.</p><a href="#inventory">Lihat modul →</a></article>
+      <article class="module"><div class="icon">▧</div><h3>Penawaran & Invoice</h3><p>Dokumen komersial, termin, tagihan, dan status pembayaran.</p><a href="#sales">Lihat modul →</a></article>
+      <article class="module" id="finance"><div class="icon">◷</div><h3>Keuangan & Pajak</h3><p>Biaya, arus kas, jurnal, rekonsiliasi, dan konfigurasi pajak.</p><a href="#finance">Lihat modul →</a></article>
+      <article class="module" id="people"><div class="icon">♙</div><h3>HRD & Payroll</h3><p>Data pegawai, kehadiran, komponen gaji, dan persetujuan.</p><a href="#people">Lihat modul →</a></article>
+    </section>
+    <div class="footer" id="reports">FORMA ELAN · Prototype internal UI. Tidak menerima atau menyimpan data pelanggan. Modul belum operasional.</div>
+  </div>
+</main>
+</div>
+</body>
+</html>
