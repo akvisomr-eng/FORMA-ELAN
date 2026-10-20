@@ -1,0 +1,13 @@
+{
+  "name": "forma-elan-backend",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "jose": "^6.1.0"
+  },
+  "scripts": {
+    "test": "node --test ../tests/backend-validation.test.mjs"
+  }
+}
