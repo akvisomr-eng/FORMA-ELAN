@@ -119,46 +119,46 @@ export default {
         const validated = validateWorkspacePayload(parsed.value);
         if (!validated.ok) return json({ error: validated.error }, 400);
         const value = validated.value;
-        const rows = await sql`
-          WITH lock AS MATERIALIZED (
-            SELECT pg_advisory_xact_lock(hashtextextended(${identity.subject}, 0))
-          ),
-          profile AS MATERIALIZED (
-            SELECT p.id, p.email
-            FROM public.user_profiles p CROSS JOIN lock
-            WHERE p.auth_subject = ${identity.subject} AND p.is_active = true
-          ),
-          org AS (
-            INSERT INTO public.organizations (name, email)
-            SELECT ${value.organizationName}, p.email
-            FROM profile p
-            WHERE NOT EXISTS (
-              SELECT 1 FROM public.organization_memberships m
-              WHERE m.user_id = p.id AND m.status = 'active'
+        const transaction = await sql.transaction([
+          sql`SELECT pg_advisory_xact_lock(hashtextextended(${identity.subject}, 0))`,
+          sql`
+            WITH profile AS MATERIALIZED (
+              SELECT id, email FROM public.user_profiles
+              WHERE auth_subject = ${identity.subject} AND is_active = true
+            ),
+            org AS (
+              INSERT INTO public.organizations (name, email)
+              SELECT ${value.organizationName}, p.email
+              FROM profile p
+              WHERE NOT EXISTS (
+                SELECT 1 FROM public.organization_memberships m
+                WHERE m.user_id = p.id AND m.status = 'active'
+              )
+              RETURNING id, name
+            ),
+            membership AS (
+              INSERT INTO public.organization_memberships (organization_id, user_id, role, status)
+              SELECT o.id, p.id, 'owner', 'active'
+              FROM org o CROSS JOIN profile p
+              RETURNING organization_id
+            ),
+            project AS (
+              INSERT INTO public.projects
+                (organization_id, code, name, service_type, site_address, project_manager_id, status)
+              SELECT o.id,
+                'FE-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 8)),
+                ${value.projectName}, ${value.serviceType}, ${value.siteAddress}, p.id, 'planning'
+              FROM org o CROSS JOIN profile p
+              RETURNING id, organization_id, code, name
             )
-            RETURNING id, name
-          ),
-          membership AS (
-            INSERT INTO public.organization_memberships (organization_id, user_id, role, status)
-            SELECT o.id, p.id, 'owner', 'active'
-            FROM org o CROSS JOIN profile p
-            RETURNING organization_id
-          ),
-          project AS (
-            INSERT INTO public.projects
-              (organization_id, code, name, service_type, site_address, project_manager_id, status)
-            SELECT o.id,
-              'FE-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 8)),
-              ${value.projectName}, ${value.serviceType}, ${value.siteAddress}, p.id, 'planning'
-            FROM org o CROSS JOIN profile p
-            RETURNING id, organization_id, code, name
-          )
-          SELECT org.id AS "organizationId", org.name AS "organizationName",
-                 project.id AS "projectId", project.code AS "projectCode",
-                 project.name AS "projectName"
-          FROM org JOIN project ON project.organization_id = org.id
-          JOIN membership ON membership.organization_id = org.id
-        `;
+            SELECT org.id AS "organizationId", org.name AS "organizationName",
+                   project.id AS "projectId", project.code AS "projectCode",
+                   project.name AS "projectName"
+            FROM org JOIN project ON project.organization_id = org.id
+            JOIN membership ON membership.organization_id = org.id
+          `
+        ]);
+        const rows = transaction[1] || [];
         if (!rows.length) return json({ error: "workspace_already_exists" }, 409);
         return json({ data: rows[0] }, 201);
       }
