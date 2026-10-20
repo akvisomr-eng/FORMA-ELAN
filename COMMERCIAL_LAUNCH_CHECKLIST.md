@@ -33,6 +33,9 @@ This checklist distinguishes committed code, configured services, tested flows, 
 - [ ] Add server-side validation, rate limits, abuse controls, and audit records.
 
 ### Multi-agent AI and companion
+- [ ] Implement the construction-specialist workflow specified in [CONSTRUCTION_AI_AGENTS.md](CONSTRUCTION_AI_AGENTS.md): drawing intake/vision, concept visualization, quantity take-off, BOQ/RAB/AHSP, buildability/risk, and project cost control.
+- [ ] Build deterministic quantity/cost calculations, source-linked measurements, versioned local price books, uncertainty flags, reviewer approval, and reconciled exports before calling estimates production-grade.
+- [ ] Add private document storage and organization/project-level authorization before enabling real drawing uploads; use synthetic data for early tests.
 - [ ] Choose a provider and verify current free-tier quotas, privacy, model availability, rate limits, and fallback before enabling generative calls.
 - [ ] Store provider credentials only as server-side secrets; never in static HTML or browser JavaScript.
 - [ ] Implement coordinator plus scoped agents for public FAQ/sales, project planning, inventory, quotes/invoices, and management reporting.
