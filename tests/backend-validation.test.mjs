@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseJsonBody, validateSurveyPayload } from "../backend/src/validation.mjs";
+import { parseJsonBody, validateSurveyPayload, validateWorkspacePayload } from "../backend/src/validation.mjs";
 
 const valid = {
   projectId: "7f9f8a20-6d33-4d70-8d85-6d2b0f17c2f2",
@@ -34,4 +34,20 @@ test("rejects invalid identifiers, unsafe survey codes, and oversized notes", ()
 test("rejects invalid status and non-object consent", () => {
   assert.equal(validateSurveyPayload({ ...valid, status: "published" }).ok, false);
   assert.equal(validateSurveyPayload({ ...valid, consentRecord: [] }).ok, false);
+});
+
+
+test("accepts a bounded workspace onboarding payload", () => {
+  const result = validateWorkspacePayload({
+    organizationName: "Forma Elan Studio",
+    projectName: "Renovasi Rumah",
+    serviceType: "Interior Design",
+    siteAddress: "Surabaya"
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.value.organizationName, "Forma Elan Studio");
+});
+test("rejects missing or oversized workspace names", () => {
+  assert.equal(validateWorkspacePayload({ organizationName: "", projectName: "Project" }).ok, false);
+  assert.equal(validateWorkspacePayload({ organizationName: "A", projectName: "x".repeat(161) }).ok, false);
 });
