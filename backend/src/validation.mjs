@@ -59,3 +59,30 @@ export function validateSurveyPayload(input) {
     }
   };
 }
+
+
+export function validateWorkspacePayload(input) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return { ok: false, error: "invalid_payload" };
+  }
+  const organizationName = typeof input.organizationName === "string" ? input.organizationName.trim() : "";
+  const projectName = typeof input.projectName === "string" ? input.projectName.trim() : "";
+  const serviceType = input.serviceType == null ? null : String(input.serviceType).trim();
+  const siteAddress = input.siteAddress == null ? null : String(input.siteAddress).trim();
+  if (!organizationName || organizationName.length > 160 || !projectName || projectName.length > 160) {
+    return { ok: false, error: "invalid_workspace_name" };
+  }
+  if ((serviceType !== null && serviceType.length > 120) ||
+      (siteAddress !== null && siteAddress.length > 500)) {
+    return { ok: false, error: "field_too_long" };
+  }
+  return {
+    ok: true,
+    value: {
+      organizationName,
+      projectName,
+      serviceType: serviceType || null,
+      siteAddress: siteAddress || null
+    }
+  };
+}
