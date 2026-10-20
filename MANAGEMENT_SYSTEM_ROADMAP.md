@@ -7,7 +7,7 @@
 - Database: Neon project `curly-meadow-68675030`, database `neondb`, target branch `br-proud-sunset-b44taoa8`.
 - Production schema was initially empty.
 - The first database migration has been applied to the target branch and re-verified: 15 public tables are present. This establishes the data-model foundation only; it does not mean the application is production-ready.
-- Authentication is not configured yet. Do not expose management data or connect browser code directly to unrestricted database credentials.
+- Neon Managed Auth has been provisioned and the GitHub Pages origin trusted, but sign-in/session flows and protected server-side APIs remain unimplemented or unverified. Do not expose management data or connect browser code directly to unrestricted database credentials.
 
 ## Phase 1 — Core business data model
 
@@ -73,3 +73,12 @@ Recommended implementation order:
 - Quote/invoice totals and stock quantities must be calculated and reconciled in trusted server-side transactions before real use.
 - Although the core schema is applied, authentication, authorization, server APIs and AI integrations are not yet configured or verified.
 - Logo and gallery-image replacement is intentionally postponed due to the file-transfer quota constraint.
+
+
+## Phase 2B — Construction Intelligence & Estimation (new core module)
+
+See [CONSTRUCTION_AI_AGENTS.md](CONSTRUCTION_AI_AGENTS.md) for the full specification. FORMA ELAN is intended to handle a traceable workflow from drawing intake and AI design concepts through quantity take-off, BOQ, RAB/AHSP, material schedules and project cost control.
+
+The specialist roles are Drawing Intake & Vision, Design Concept & Visualization, Quantity Surveyor, BOQ/RAB Cost Engineer, Buildability & Risk, Project Cost Control, and a permission-aware Orchestrator/Audit Agent. Arithmetic and money totals must be deterministic server-side calculations; AI proposes/labels inputs but does not become the calculation source of truth. Drawing-derived quantities need sheet references, formulas, units, assumptions, uncertainty flags and human review. No invented dimensions or market rates.
+
+This is a specification, not an implemented feature. Initial implementation should be a deterministic MVP using synthetic/reference data, manual dimension entry, configurable price books and tested CSV/XLSX exports. Secure private document storage and server-side access controls must precede real customer uploads or project data. AI image generation and metered OCR/model calls require provider/licensing/privacy review and explicit owner approval where costs may occur.
