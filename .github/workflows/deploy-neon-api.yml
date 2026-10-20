@@ -1,0 +1,49 @@
+name: Deploy FORMA ELAN API to Neon
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: "Type DEPLOY to deploy the API to the production Neon branch"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: forma-elan-neon-production-api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm_production == 'DEPLOY' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate source and tests
+        run: |
+          node --check backend/src/index.mjs
+          node --test tests/backend-validation.test.mjs
+      - name: Deploy Neon Function
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+        run: |
+          test -n "$NEON_API_KEY" || (echo "Missing repository/environment secret NEON_API_KEY" && exit 1)
+          npx --yes neonctl@latest functions deploy formaapi \
+            --src backend/src/index.mjs \
+            --project-id curly-meadow-68675030 \
+            --branch-id br-proud-sunset-b44taoa8
+      - name: Report deployment endpoint
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+        run: |
+          npx --yes neonctl@latest functions get formaapi \
+            --project-id curly-meadow-68675030 \
+            --branch-id br-proud-sunset-b44taoa8
