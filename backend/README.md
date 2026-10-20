@@ -5,6 +5,7 @@ This API is designed for Neon Functions and uses the branch-injected `DATABASE_U
 ## Routes
 
 - `GET /health`: non-sensitive service status only.
+- `POST /v1/me/bootstrap`: validates the caller's Neon Auth JWT, loads the corresponding `neon_auth.user` record, and creates/updates only that caller's `user_profiles` row. It does not grant organization membership.
 - `GET /v1/surveys?organizationId=<uuid>&projectId=<uuid>`: requires a valid Neon Auth JWT, a provisioned active `user_profiles` row whose `auth_subject` matches the token `sub`, and an active organization membership for the selected project.
 - `POST /v1/surveys`: same authorization requirements; accepts project/organization IDs, survey code, client name, site address, notes, and a consent record. Status is always created as `draft`.
 
@@ -15,7 +16,7 @@ This API is designed for Neon Functions and uses the branch-injected `DATABASE_U
 - Membership is checked on every read/write because the database owner can bypass table RLS.
 - RLS is enabled on survey tables with no browser-facing policies. This function is the only planned application access path for now.
 - Uploads, AI analysis, object storage, client-facing sharing, and automatic measurements remain disabled.
-- A missing profile mapping fails closed with `profile_not_provisioned`. User/profile provisioning must be implemented and tested before this API can be used by normal accounts.
+- A missing profile mapping fails closed with `profile_not_provisioned`; the authenticated bootstrap route can provision the caller from Neon Auth's own user row. Membership is still separately required.
 - Do not deploy a public frontend pointing at this API until sign-up/sign-in, profile mapping, and authorization have passed end-to-end tests.
 
 ## Local checks
