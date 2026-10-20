@@ -33,6 +33,8 @@ This checklist distinguishes committed code, configured services, tested flows, 
 - [ ] Add server-side validation, rate limits, abuse controls, and audit records.
 
 ### Multi-agent AI and companion
+- [x] Commit the first deterministic construction estimate engine and a browser-only manual-entry RAB/BOQ preview. This is a calculation foundation only, not automatic drawing analysis or a production estimator.
+- [ ] Verify the new calculation test suite passes in GitHub Actions and the deployed estimator page passes its live smoke test.
 - [ ] Implement the construction-specialist workflow specified in [CONSTRUCTION_AI_AGENTS.md](CONSTRUCTION_AI_AGENTS.md): drawing intake/vision, concept visualization, quantity take-off, BOQ/RAB/AHSP, buildability/risk, and project cost control.
 - [ ] Build deterministic quantity/cost calculations, source-linked measurements, versioned local price books, uncertainty flags, reviewer approval, and reconciled exports before calling estimates production-grade.
 - [ ] Add private document storage and organization/project-level authorization before enabling real drawing uploads; use synthetic data for early tests.
@@ -60,4 +62,4 @@ This checklist distinguishes committed code, configured services, tested flows, 
 
 ## Current status
 
-The public static site and the database/auth foundation are present. The website's companion is still a local FAQ/voice preview; the management UI is a mock prototype. Authentication flows, protected APIs, generative multi-agent orchestration, end-to-end tests, and live release smoke tests remain unverified. This is a development/prelaunch state, not yet a complete commercial release.
+The public static site and the database/auth foundation are present. The website's companion is still a local FAQ/voice preview; the management UI is a mock prototype; and the new RAB/BOQ page is a browser-only preview using manually entered data. Its test suite is committed but not yet verified as passing in CI. Authentication flows, protected APIs, drawing analysis, design image generation, generative multi-agent orchestration, end-to-end tests, and live release smoke tests remain unverified. This is a development/prelaunch state, not yet a complete commercial release.
