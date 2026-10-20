@@ -1,6 +1,6 @@
 # FORMA ELAN — Construction Intelligence & Estimation Agents
 
-Status: **specification / planned implementation**. This document defines the intended workflow; it is not evidence that drawing analysis, quantity take-off, pricing, or document export is already operational.
+Status: **specification plus early calculation prototype**. A deterministic manual-input calculation module and browser-only CSV preview are committed. This does not mean drawing analysis, AI visualization, secure file upload, market pricing, full BOQ/RAB workflows, or production document export are operational. CI and live deployment remain to be verified.
 
 ## Product goal
 
