@@ -31,6 +31,8 @@ jobs:
         run: |
           node --check backend/src/index.mjs
           node --test tests/backend-validation.test.mjs
+      - name: Install runtime dependencies
+        run: npm install --no-audit --no-fund
       - name: Deploy Neon Function
         env:
           NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
