@@ -6,6 +6,7 @@ This API is designed for Neon Functions and uses the branch-injected `DATABASE_U
 
 - `GET /health`: non-sensitive service status only.
 - `POST /v1/me/bootstrap`: validates the caller's Neon Auth JWT, loads the corresponding `neon_auth.user` record, and creates/updates only that caller's `user_profiles` row. It does not grant organization membership.
+- `POST /v1/onboarding/workspace`: creates a first organization, active owner membership, and starter project for the authenticated profile. The request cannot supply a user ID. A per-subject advisory transaction lock prevents concurrent first-workspace requests from creating duplicate workspaces.
 - `GET /v1/surveys?organizationId=<uuid>&projectId=<uuid>`: requires a valid Neon Auth JWT, a provisioned active `user_profiles` row whose `auth_subject` matches the token `sub`, and an active organization membership for the selected project.
 - `POST /v1/surveys`: same authorization requirements; accepts project/organization IDs, survey code, client name, site address, notes, and a consent record. Status is always created as `draft`.
 
@@ -25,4 +26,4 @@ Run `node --test tests/backend-validation.test.mjs`. Runtime dependencies are li
 
 ## Deployment status
 
-Source and configuration are committed to GitHub; the function has not yet been deployed. Deploying requires a successful bundle/build, Neon Function deployment, and authenticated integration tests. Do not put database URLs, OAuth secrets, or API keys in GitHub or the browser.
+Source and configuration are committed to GitHub; the function has not yet been deployed. Deploying requires a successful bundle/build, Neon Function deployment, and authenticated integration tests, including the new workspace-onboarding route. Do not put database URLs, OAuth secrets, or API keys in GitHub or the browser.
