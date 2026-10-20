@@ -64,7 +64,7 @@ Recommended implementation order:
 
 - GitHub Actions now includes a static-site quality check for required Indonesian website sections, text/voice companion hooks, truthful prototype notices, and obvious credential/connection-string patterns.
 - The Pages deployment workflow is restricted to the public website files (`index.html`, `management-prototype.html`, and optional `assets/`) rather than uploading the whole repository root.
-- These workflow changes need a successful Actions run and a live URL smoke test before being marked released.
+- The Pages deployment now includes the estimator preview and calculation module, and gates deployment on the estimator test suite. A successful Actions run and live URL smoke test are still required before marking the preview released.
 
 ## Important limitations
 
@@ -77,7 +77,7 @@ Recommended implementation order:
 
 ## Phase 2B — Construction Intelligence & Estimation (new core module)
 
-See [CONSTRUCTION_AI_AGENTS.md](CONSTRUCTION_AI_AGENTS.md) for the full specification. FORMA ELAN is intended to handle a traceable workflow from drawing intake and AI design concepts through quantity take-off, BOQ, RAB/AHSP, material schedules and project cost control.
+See [CONSTRUCTION_AI_AGENTS.md](CONSTRUCTION_AI_AGENTS.md) for the full specification. The first deterministic calculation module is now committed at `src/construction-estimator.mjs`, with regression tests in `tests/construction-estimator.test.mjs` and a browser-only preview page at `construction-estimator.html`. The preview accepts manually entered quantities and rates and can export a CSV. This is not drawing analysis or generative AI, and its automated test run and live deployment are not yet verified. The complete intended workflow covers drawing intake and AI design concepts through quantity take-off, BOQ, RAB/AHSP, material schedules and project cost control.
 
 The specialist roles are Drawing Intake & Vision, Design Concept & Visualization, Quantity Surveyor, BOQ/RAB Cost Engineer, Buildability & Risk, Project Cost Control, and a permission-aware Orchestrator/Audit Agent. Arithmetic and money totals must be deterministic server-side calculations; AI proposes/labels inputs but does not become the calculation source of truth. Drawing-derived quantities need sheet references, formulas, units, assumptions, uncertainty flags and human review. No invented dimensions or market rates.
 
