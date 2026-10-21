@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseJsonBody, validateSurveyPayload, validateWorkspacePayload } from "../backend/src/validation.mjs";
+import { isUuid, parseJsonBody, validateSurveyPayload, validateWorkspacePayload } from "../backend/src/validation.mjs";
 
 const valid = {
   projectId: "7f9f8a20-6d33-4d70-8d85-6d2b0f17c2f2",
@@ -50,4 +50,11 @@ test("accepts a bounded workspace onboarding payload", () => {
 test("rejects missing or oversized workspace names", () => {
   assert.equal(validateWorkspacePayload({ organizationName: "", projectName: "Project" }).ok, false);
   assert.equal(validateWorkspacePayload({ organizationName: "A", projectName: "x".repeat(161) }).ok, false);
+});
+
+test("validates UUID syntax consistently for route parameters", () => {
+  assert.equal(isUuid("7f9f8a20-6d33-4d70-8d85-6d2b0f17c2f2"), true);
+  assert.equal(isUuid("not-a-uuid"), false);
+  assert.equal(isUuid(""), false);
+  assert.equal(isUuid(null), false);
 });
