@@ -1,6 +1,11 @@
 name: FORMA ELAN live API smoke tests
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - "tests/live-api-smoke.test.mjs"
+      - ".github/workflows/live-api-smoke.yml"
   workflow_dispatch:
     inputs:
       confirm_live_test:
@@ -13,7 +18,7 @@ permissions:
 
 jobs:
   live-smoke:
-    if: ${{ inputs.confirm_live_test == 'SMOKE' }}
+    if: ${{ github.event_name == 'push' || inputs.confirm_live_test == 'SMOKE' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
