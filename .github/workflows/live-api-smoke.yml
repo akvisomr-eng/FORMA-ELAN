@@ -1,0 +1,29 @@
+name: FORMA ELAN live API smoke tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_live_test:
+        description: "Enter SMOKE to test the deployed API's non-destructive security boundaries"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke:
+    if: ${{ inputs.confirm_live_test == 'SMOKE' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify live API security boundaries
+        env:
+          FORMA_API_URL: https://br-proud-sunset-b44taoa8-formaapi.compute.c-6.us-east-2.aws.neon.tech
+        run: node --test tests/live-api-smoke.test.mjs
