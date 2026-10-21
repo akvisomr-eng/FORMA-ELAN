@@ -1,4 +1,6 @@
 export const MAX_JSON_BYTES = 64 * 1024;
+export const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+export const isUuid = value => typeof value === "string" && UUID_PATTERN.test(value);
 export const ALLOWED_SURVEY_STATUSES = new Set([
   "draft", "submitted", "analysis_pending", "in_review", "approved", "archived"
 ]);
@@ -25,8 +27,7 @@ export function validateSurveyPayload(input) {
   const surveyCode = typeof input.surveyCode === "string" ? input.surveyCode.trim() : "";
   const projectId = typeof input.projectId === "string" ? input.projectId : "";
   const organizationId = typeof input.organizationId === "string" ? input.organizationId : "";
-  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  if (!uuid.test(projectId) || !uuid.test(organizationId)) {
+  if (!isUuid(projectId) || !isUuid(organizationId)) {
     return { ok: false, error: "invalid_project_or_organization_id" };
   }
   if (!surveyCode || surveyCode.length > 80 || !/^[\p{L}\p{N}._/-]+$/u.test(surveyCode)) {
