@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { createRemoteJWKSet, jwtVerify } from "jose";
-import { parseJsonBody, validateSurveyPayload, validateWorkspacePayload } from "./validation.mjs";
+import { isUuid, parseJsonBody, validateSurveyPayload, validateWorkspacePayload } from "./validation.mjs";
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), {
   status,
@@ -167,6 +167,7 @@ export default {
         const projectId = url.searchParams.get("projectId") || "";
         const organizationId = url.searchParams.get("organizationId") || "";
         if (!projectId || !organizationId) return json({ error: "projectId_and_organizationId_required" }, 400);
+        if (!isUuid(projectId) || !isUuid(organizationId)) return json({ error: "invalid_project_or_organization_id" }, 400);
         if (!await hasProjectAccess(sql, profile.id, organizationId, projectId)) {
           return json({ error: "forbidden" }, 403);
         }
